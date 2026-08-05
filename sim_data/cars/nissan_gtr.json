@@ -1,0 +1,22 @@
+{
+    "name": "Nissan GT-R R35",
+
+    "engine": {
+        "idle_rpm": 700,
+        "max_rpm": 7000,
+        "peak_torque": 633
+    },
+
+    "gearbox": {
+        "type": "dual_clutch",
+        "ratios": [
+            4.056,
+            2.301,
+            1.595,
+            1.248,
+            1.001,
+            0.796
+        ],
+        "final_drive": 3.700
+    }
+}

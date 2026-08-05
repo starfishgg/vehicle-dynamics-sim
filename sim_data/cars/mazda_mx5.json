@@ -1,0 +1,22 @@
+{
+    "name": "Mazda MX-5 ND",
+    
+    "engine": {
+        "idle_rpm": 800,
+        "max_rpm": 7500,
+        "peak_torque": 205
+    },
+
+    "gearbox": {
+        "type": "manual",
+        "ratios": [
+            5.087,
+            2.991,
+            2.035,
+            1.594,
+            1.286,
+            1.000
+        ],
+        "final_drive": 2.866
+    }
+}
