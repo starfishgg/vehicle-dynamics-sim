@@ -20,7 +20,8 @@ from sim_core.settings import *
 
 def create_test_vehicle():
     controller = DriverInput(
-        throttle=1.0
+        throttle=1.0,
+        steering=5.0
     )
 
     tyres = [
@@ -31,11 +32,37 @@ def create_test_vehicle():
     ]
 
     wheels = [
-        Wheel(name="Front Left", tyre=tyres[FRONT_LEFT]),
-        Wheel(name="Front Right", tyre=tyres[FRONT_RIGHT]),
-        Wheel(name="Rear Left", tyre=tyres[REAR_LEFT]),
-        Wheel(name="Rear Right", tyre=tyres[REAR_RIGHT])
+        Wheel(
+            name="Front Left", 
+            tyre=tyres[FRONT_LEFT],
+            position_x=1.4,
+            position_y=-0.8,
+            steering_angle=0.0
+        ),
+        Wheel(
+            name="Front Right", 
+            tyre=tyres[FRONT_RIGHT],
+            position_x=1.4,
+            position_y=0.8,
+            steering_angle=0.0
+        ),
+        Wheel(
+            name="Rear Left", 
+            tyre=tyres[REAR_LEFT],
+            position_x=-1.4,
+            position_y=-0.8,
+            steering_angle=0.0
+        ),
+        Wheel(
+            name="Rear Right", 
+            tyre=tyres[REAR_RIGHT],
+            position_x=-1.4,
+            position_y=0.8,
+            steering_angle=0.0
+        )
     ]
+
+
 
     return Vehicle(
         driver_input=controller,
@@ -62,7 +89,7 @@ def run():
 
     for step in range(1000):
 
-        car.update(dt)
+        car.update(car.driver_input, dt)
 
         if step % 100 == 0:
 

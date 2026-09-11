@@ -56,6 +56,6 @@ class DriverInput:
         self.throttle = clamp(self.throttle, 0.0, 1.0)
         self.brake = clamp(self.brake, 0.0, 1.0)
         self.clutch = clamp(self.clutch, 0.0, 1.0)
-        self.strering = clamp(self.steering, -1.0, 1.0)
+        self.steering = clamp(self.steering, -1.0, 1.0)
         self.gear_request = clamp(self.gear_request, -1, 8)
 

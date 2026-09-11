@@ -15,16 +15,16 @@ Current features:
 - Tyre grip model
 - Physics integration
 - Basic acceleration simulation
-
-## Planned features
-
 - Engine RPM
 - Torque curves
+- Steering (work in progress)
+- Telemetry
+ 
+## Planned features
+
 - Automatic and manual gearboxes
-- Steering
 - Suspension
 - Weight transfer
 - Aerodynamic drag
-- Telemetry
 - REST API
 - Visualisation

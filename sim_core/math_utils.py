@@ -19,28 +19,39 @@ def clamp(value: float, minimum: float, maximum: float) -> float:
 
 
 def rotate_local_vector(
-        force: float,
+        local_x: float,
+        local_y: float,
         heading: float
 ) -> tuple[float, float]:
     """
-    Converts a force from vehicle coordinates
+    Converts a vector from vehicle-local coordinates
     into world coordinates.
 
     Args:
-        force:
-            Force magnitude in Newtons.
+        local_x:
+            Vector component in the vehicle's forward direction.
+
+        local_y:
+            Vector component in the vehicle's sideways direction.
 
         heading:
             Vehicle heading in degrees.
 
     Returns:
-        Tuple containing world X and Y force.
+        A tuple containing the  world X and Y components.
     """
 
-    radians = math.radians(heading)
+    heading_radians = math.radians(heading)
 
-    force_x = force * math.cos(radians)
-    force_y = force * math.sin(radians)
+    world_x = (
+        local_x * math.cos(heading_radians)
+        - local_y * math.sin(heading_radians)
+    )
 
-    return force_x, force_y
+    world_y = (
+        local_x * math.sin(heading_radians)
+        + local_y * math.cos(heading_radians)
+    )
+
+    return world_x, world_y
 

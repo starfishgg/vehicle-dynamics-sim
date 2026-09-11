@@ -13,7 +13,8 @@ class Gearbox:
     def __init__(
         self,
         current_gear: int=1,
-        gear_ratios: list[float] | None = None
+        gear_ratios: list[float] | None = None,
+        final_drive_ratio: float = 3.90
     ):
         self.current_gear = current_gear
 
@@ -27,8 +28,18 @@ class Gearbox:
             ]
         else:
             self.gear_ratios = gear_ratios
-        
 
+        self.final_drive_ratio = final_drive_ratio
+
+
+    def get_total_ratio(self) -> float:
+        """
+        Returns the combined gear ratio and final-drive ratio.
+        """
+
+        return self.get_current_ratio() * self.final_drive_ratio
+
+    
     def get_current_ratio(self) -> float:
         return self.gear_ratios[self.current_gear - 1]
 

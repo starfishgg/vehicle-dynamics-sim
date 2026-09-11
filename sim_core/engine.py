@@ -5,6 +5,9 @@ Contains the Engine class, which models engine torque production.
 """
 
 
+from sim_core.math_utils import clamp
+
+
 
 
 class Engine:
@@ -26,11 +29,16 @@ class Engine:
 
         # Maximum engine torque
         self.peak_torque = peak_torque
+        self.current_torque = 0.0
+
+
+    def set_rpm(self, rpm: float) -> None:
+        self.rpm = clamp(rpm, self.idle_rpm, self.max_rpm)
 
 
     def calculate_torque(self, throttle: float) -> float:
         """
-        Calculates engine torque output.
+        Calculates engine torque output based on throttle position and RPM.
         
         Args:
             throttle:
@@ -41,10 +49,34 @@ class Engine:
         """
 
 
-        throttle = max(0.0, min(throttle, 1.0))
+        throttle = clamp(throttle, 0.0, 1.0)
 
-        # This is a simplistic and unrealistic torque calculation.
-        # We will improve it to a torque_curve later.
-        return self.peak_torque * throttle
+        # Simple torque curve:
+        # - Lower torque at idle
+        # - Peak torque around 4500 RPM
+        # - Torque falls away towards redline
+        
+        if self.rpm <= 1500:
+            torque_factor = 0.70
+
+        elif self.rpm <= 4500:
+            torque_factor = 0.70 + (
+                0.30 * (self.rpm - 1500) / 3000
+            )
+
+        else:
+            torque_factor = 1.0 - (
+                0.25 * (self.rpm - 4500) / 2500
+            )
+
+        torque_factor = clamp(torque_factor, 0.0, 1.0)
+
+        self.current_torque = (
+            self.peak_torque
+            * torque_factor
+            * throttle
+        )
+        
+        return self.current_torque
 
     
