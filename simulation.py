@@ -21,7 +21,7 @@ from sim_core.settings import *
 def create_test_vehicle():
     controller = DriverInput(
         throttle=1.0,
-        steering=5.0
+        steering=0.33
     )
 
     tyres = [
@@ -90,7 +90,7 @@ def run():
     for step in range(1000):
 
         car.update(car.driver_input, dt)
-
+        
         if step % 100 == 0:
 
             print(

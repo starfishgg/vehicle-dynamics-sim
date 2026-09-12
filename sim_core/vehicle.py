@@ -27,14 +27,18 @@ class Vehicle:
         engine: Engine,
         drivetrain: Drivetrain,
         wheels: list[Wheel],
-        physics: PhysicsState
-
+        physics: PhysicsState,
+        maximum_steering_angle: float = 30.0
     ):
         self.driver_input = driver_input
         self.engine = engine
         self.drivetrain = drivetrain
         self.wheels = wheels
         self.physics = physics
+
+        # Maximum physical steering angle of the front wheels.
+        # DriverInput.steering is normalised from -1.0 to +1.0.
+        self.maximum_steering_angle = maximum_steering_angle
 
 
     def update(
@@ -46,10 +50,27 @@ class Vehicle:
         # Store current driver input for telemetry
         self.driver_input = driver_input
 
-        # Steer the wheels
-        for wheel in self.wheels:
-            if wheel.name in ["Front Left", "Front Right"]:
-                wheel.steering_angle = self.driver_input.steering
+        # Convert normalised driver steering into a physical
+        # front-wheel steering angle.
+        #
+        # Driver input:
+        # -1.0 = full left
+        #  0.0 = straight ahead
+        # +1.0 = full right
+        #
+        # Physical wheel angle:
+        # -30° = full left
+        #   0° = straight ahead
+        # +30° = full right
+
+        steering_angle = (
+            self.driver_input.steering * self.maximum_steering_angle
+        )
+
+        # Apply steering only to the front wheels
+        for index, wheel in enumerate(self.wheels):
+            if index in [FRONT_LEFT, FRONT_RIGHT]:
+                wheel.steering_angle = steering_angle
 
         # 1. Engine produces torque
         engine_torque = self.engine.calculate_torque(self.driver_input.throttle)
@@ -118,7 +139,7 @@ class Vehicle:
             #)
 
 
-            lateral_direction_x, lateral_direciton_y = (
+            lateral_direction_x, lateral_direction_y = (
                 wheel.get_lateral_force_direction()
             )
 
@@ -127,7 +148,7 @@ class Vehicle:
             )
 
             lateral_force_y = (
-                lateral_force * lateral_direciton_y
+                lateral_force * lateral_direction_y
             )
 
             longitudinal_force_x, longitudinal_force_y = (
@@ -216,6 +237,8 @@ class Vehicle:
         for index, wheel in enumerate(self.wheels):
             print(
                 f"Wheel {index}: "
-                f"{wheel.last_longitudinal_force:.1f} N"
+                f"{wheel.name} steering angle: "
+                f"{wheel.steering_angle:.2f}° "
+                f"\tLast Longi Force: {wheel.last_longitudinal_force:.1f} N"
             )
 
